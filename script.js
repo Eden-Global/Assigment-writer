@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- CONFIGURATION ---
-    // This should be your new, permanent Render URL.
-    const API_URL = 'https://assignment-writer-api.onrender.com/api/generate'; 
+    // YOUR NEW RENDER URL IS SET HERE!
+    const API_URL = 'https://assigment-writer-2.onrender.com/api/generate'; 
+    
     const GITHUB_USERNAME = 'Eden-Global';
     const REPO_NAME = 'Assigment-writer'; // Using the exact spelling from your repo
     const BRANCH_NAME = 'main';
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingDiv = document.getElementById('loading');
     const resultDiv = document.getElementById('result');
     
-    // Correctly constructs the URL to your single paper image
+    // Constructs the URL to your single paper image
     const paperImageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH_NAME}/Assets/images/A4sheet.png`;
 
     form.addEventListener('submit', async (event) => {
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(requestData),
             });
             
-            // --- THIS IS THE NEW, UPDATED PART ---
+            // --- Handle the Response ---
             if (!response.ok) {
                 // If the server sends an error (like 400 or 500), this block will run.
                 let errorMsg = `Server returned an error: ${response.status} ${response.statusText}`;
@@ -66,14 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         errorMsg = errorResult.error;
                     }
                 } catch (e) {
-                    // If the response isn't JSON, we just use the status text.
                     console.log("Could not parse error JSON from server.");
                 }
                 throw new Error(errorMsg);
             }
 
-            // If the response is OK (200), it means the server is sending us the image file directly.
-            // We convert the image data (a "blob") into a temporary URL that the browser can display.
+            // If the response is OK (200), the server is sending us the image file directly.
+            // We convert the image data (a "blob") into a temporary URL the browser can display.
             const imageBlob = await response.blob();
             const imageUrl = URL.createObjectURL(imageBlob);
 
@@ -88,8 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             // --- Display Error Message ---
-            // This 'catch' block handles both network errors (like "Failed to fetch")
-            // and the server errors we threw in the 'if (!response.ok)' block.
             resultDiv.innerHTML = `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
             resultDiv.classList.remove('hidden');
             form.classList.remove('hidden'); // Show the form again so the user can retry
