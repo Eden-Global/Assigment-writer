@@ -10,19 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <div class="container">
         <header>
             <h1>Assignment Writer Agent ✍️</h1>
             <p>Your personal assistant for generating handwritten assignments.</p>
         </header>
-
         <form id="assignmentForm">
             <fieldset>
                 <legend>Step 1: Paste Your Text</legend>
                 <textarea id="paragraph" placeholder="Type or paste the text for your assignment here..." required></textarea>
             </fieldset>
-
             <fieldset>
                 <legend>Step 2: Choose Paper Style</legend>
                 <div class="radio-group">
@@ -30,7 +27,6 @@
                     <label><input type="radio" name="paper" value="A4 Sheet Lined"> Lined A4 Sheet</label>
                 </div>
             </fieldset>
-
             <fieldset>
                 <legend>Step 3: Choose Ink Color</legend>
                 <div class="radio-group">
@@ -39,32 +35,24 @@
                     <label><input type="radio" name="ink" value="Red" required> Red Ink</label>
                 </div>
             </fieldset>
-
             <fieldset>
                 <legend>Step 4: Select Handwriting Style</legend>
                 <div class="radio-group">
-                    <!-- CORRECTED SPELLING: "Assigment-writer" -->
-                    <label><input type="radio" name="handwriting" value="Handwriting 1" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/assets/fonts/Handwriting1.ttf" checked required> Style 1 (Neat)</label>
-                    <label><input type="radio" name="handwriting" value="Handwriting 2" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/assets/fonts/Handwriting2.ttf" required> Style 2 (Casual)</label>
-                    <label><input type="radio" name="handwriting" value="Handwriting 3" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/assets/fonts/Handwriting3.ttf" required> Style 3 (Bold)</label>
-                    <label><input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/assets/fonts/Handwriting4.ttf" required> Style 4 (Cursive)</label>
+                    <!-- FIXED: Changed "assets" to "Assets" to match your folder name -->
+                    <label><input type="radio" name="handwriting" value="Handwriting 1" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting1.ttf" checked required> Style 1 (Neat)</label>
+                    <label><input type="radio" name="handwriting" value="Handwriting 2" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting2.ttf" required> Style 2 (Casual)</label>
+                    <label><input type="radio" name="handwriting" value="Handwriting 3" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting3.ttf" required> Style 3 (Bold)</label>
+                    <label><input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required> Style 4 (Cursive)</label>
                 </div>
             </fieldset>
-
             <button type="submit" id="generateBtn">Generate Assignment</button>
         </form>
-
         <div id="loading" class="hidden">
             <div class="spinner"></div>
             <p>Your agent is writing... This may take a moment.</p>
         </div>
-
-        <div id="result" class="hidden">
-            <!-- The generated assignment will appear here -->
-        </div>
-
+        <div id="result" class="hidden"></div>
     </div>
-
     <script src="script.js"></script>
 </body>
-                                                    </html>
+    </html>
