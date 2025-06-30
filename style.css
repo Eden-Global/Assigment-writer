@@ -112,23 +112,28 @@ button:disabled {
     text-align: center;
     padding: 40px 0;
 }
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #1a73e8;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 20px;
+#loading {
+    display: flex; /* Use flexbox for easy centering */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    padding: 40px 0;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Style for the new animation image */
+#loading img {
+    max-width: 250px; /* Adjust this size to what looks best! */
+    margin-bottom: 20px;
 }
 
-#result {
+/* Style for the text below the animation */
+#loading p {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #5f6368;
+    }
+
+    #result {
     text-align: center;
     margin-top: 30px;
 }
