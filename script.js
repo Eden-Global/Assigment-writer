@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ELEMENT SELECTORS ---
     const steps = document.querySelectorAll('.form-step');
-    const formContainer = document.getElementById('form-container'); // Renamed for clarity
+    const formContainer = document.getElementById('form-container');
     const loadingDiv = document.getElementById('loading');
     const resultDiv = document.getElementById('result');
     const characters = {
@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedHandwriting = document.querySelector('input[name="handwriting"]:checked');
         userSelections.fontUrl = selectedHandwriting.dataset.url;
 
-        // *** THE FIX: Hide form, show loading. They are separate now. ***
         formContainer.classList.add('hidden');
         resultDiv.classList.add('hidden');
         Object.values(characters).forEach(char => char.classList.remove('active'));
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const errorResult = await response.json();
                     errorMsg = errorResult.error || errorResult.message || errorMsg;
-                } catch (e) { /* Ignore parsing error */ }
+                } catch (e) { /* Ignore */ }
                 throw new Error(errorMsg);
             }
 
@@ -108,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             displayError(error.message);
         } finally {
-            // *** THE FIX: Only need to hide loading div. The form is already hidden. ***
             loadingDiv.classList.add('hidden');
         }
     });
@@ -128,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button id="startOverBtn" class="btn-next" style="margin-top: 20px;">Start Over</button>
             </div>
         `;
-        resultDiv.classList.remove('hidden'); // Show the results
+        resultDiv.classList.remove('hidden');
 
         document.getElementById('downloadPngBtn').addEventListener('click', () => { downloadFile(imageUrl, 'assignment.png'); });
         document.getElementById('downloadPdfBtn').addEventListener('click', () => { downloadPdf(); });
@@ -142,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('startOverBtn').addEventListener('click', () => { location.reload(); });
     }
 
-    // --- DOWNLOAD HANDLERS (No changes needed here) ---
+    // --- DOWNLOAD HANDLERS ---
     const downloadFile = (url, filename) => { const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); };
     const downloadPdf = () => { const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'px', 'a4'); const img = document.getElementById('resultImage'); const imgWidth = doc.internal.pageSize.getWidth(); const imgHeight = (img.height * imgWidth) / img.width; doc.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight); doc.save('assignment.pdf'); };
     const downloadDocx = (imageBlob) => { const doc = new docx.Document({ sections: [{ children: [ new docx.Paragraph({ children: [ new docx.ImageRun({ data: imageBlob, transformation: { width: 600, height: 848 } }) ] }) ] }] }); docx.Packer.toBlob(doc).then(blob => { const url = URL.createObjectURL(blob); downloadFile(url, 'assignment.docx'); URL.revokeObjectURL(url); }); };
