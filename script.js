@@ -8,12 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- STATE MANAGEMENT ---
     let currentStep = 1;
-    const totalSteps = 4;
     const userSelections = {};
 
     // --- ELEMENT SELECTORS ---
     const steps = document.querySelectorAll('.form-step');
-    const container = document.querySelector('.container');
+    const formContainer = document.getElementById('form-container'); // Renamed for clarity
     const loadingDiv = document.getElementById('loading');
     const resultDiv = document.getElementById('result');
     const characters = {
@@ -56,14 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
         userSelections.editorContent = quill.getContents();
         navigateToStep(2);
     });
-
     document.getElementById('btn-step-2').addEventListener('click', () => {
         const selected = document.querySelector('input[name="paper"]:checked');
         userSelections.paperType = selected.value;
         userSelections.paperUrl = (selected.value === 'A4 Sheet Lined') ? linedPaperUrl : paperImageUrl;
         navigateToStep(3);
     });
-
     document.getElementById('btn-step-3').addEventListener('click', () => {
         userSelections.ink = document.querySelector('input[name="ink"]:checked').value;
         navigateToStep(4);
@@ -74,15 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedHandwriting = document.querySelector('input[name="handwriting"]:checked');
         userSelections.fontUrl = selectedHandwriting.dataset.url;
 
-        // Hide form and show loading
-        container.style.display = 'none';
+        // *** THE FIX: Hide form, show loading. They are separate now. ***
+        formContainer.classList.add('hidden');
+        resultDiv.classList.add('hidden');
         Object.values(characters).forEach(char => char.classList.remove('active'));
         loadingDiv.classList.remove('hidden');
-        resultDiv.classList.add('hidden');
-        resultDiv.innerHTML = '';
 
         try {
-            // Construct final request data
             const requestData = {
                 editorContent: userSelections.editorContent,
                 paperType: userSelections.paperType,
@@ -91,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 paperUrl: userSelections.paperUrl
             };
             
-            // Call the API
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -102,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let errorMsg = `Server error: ${response.statusText}`;
                 try {
                     const errorResult = await response.json();
-                    errorMsg = errorResult.error || errorMsg;
+                    errorMsg = errorResult.error || errorResult.message || errorMsg;
                 } catch (e) { /* Ignore parsing error */ }
                 throw new Error(errorMsg);
             }
@@ -114,29 +108,28 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             displayError(error.message);
         } finally {
+            // *** THE FIX: Only need to hide loading div. The form is already hidden. ***
             loadingDiv.classList.add('hidden');
-            container.style.display = 'block'; // Show container again to display results
-            navigateToStep(4); // Or a new results step if you prefer
         }
     });
 
     // --- HELPER FUNCTIONS ---
     function displayResults(imageUrl, imageBlob) {
-        steps.forEach(step => step.classList.remove('active')); // Hide all form steps
         resultDiv.innerHTML = `
-            <h2>Generation Complete!</h2>
-            <p style="color: #ccc; margin-top: -10px; margin-bottom: 20px;">Your document has been successfully created.</p>
-            <img src="${imageUrl}" alt="Generated Handwritten Assignment" id="resultImage">
-            <div class="download-options">
-                <button id="downloadPngBtn" class="download-btn btn-png">Download PNG</button>
-                <button id="downloadPdfBtn" class="download-btn btn-pdf">Download PDF</button>
-                <button id="downloadDocBtn" class="download-btn btn-doc">Download DOCX</button>
+            <div class="container result-container">
+                <h2>Generation Complete!</h2>
+                <p style="color: #ccc; margin-top: -10px; margin-bottom: 20px;">Your document has been successfully created.</p>
+                <img src="${imageUrl}" alt="Generated Handwritten Assignment" id="resultImage">
+                <div class="download-options">
+                    <button id="downloadPngBtn" class="download-btn btn-png">Download PNG</button>
+                    <button id="downloadPdfBtn" class="download-btn btn-pdf">Download PDF</button>
+                    <button id="downloadDocBtn" class="download-btn btn-doc">Download DOCX</button>
+                </div>
+                <button id="startOverBtn" class="btn-next" style="margin-top: 20px;">Start Over</button>
             </div>
-            <button id="startOverBtn" class="btn-next" style="margin-top: 20px;">Start Over</button>
         `;
-        resultDiv.classList.remove('hidden');
+        resultDiv.classList.remove('hidden'); // Show the results
 
-        // Add event listeners for new buttons
         document.getElementById('downloadPngBtn').addEventListener('click', () => { downloadFile(imageUrl, 'assignment.png'); });
         document.getElementById('downloadPdfBtn').addEventListener('click', () => { downloadPdf(); });
         document.getElementById('downloadDocBtn').addEventListener('click', () => { downloadDocx(imageBlob); });
@@ -144,53 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayError(message) {
-        steps.forEach(step => step.classList.remove('active'));
-        resultDiv.innerHTML = `<h2 class="error-message">An Error Occurred</h2><p style="color: #ccc;">${message}</p><button id="startOverBtn" class="btn-next" style="margin-top: 20px;">Try Again</button>`;
+        resultDiv.innerHTML = `<div class="container result-container"><h2 class="error-message">An Error Occurred</h2><p style="color: #ccc;">${message}</p><button id="startOverBtn" class="btn-next" style="margin-top: 20px;">Try Again</button></div>`;
         resultDiv.classList.remove('hidden');
         document.getElementById('startOverBtn').addEventListener('click', () => { location.reload(); });
     }
 
-    // --- DOWNLOAD HANDLERS ---
-    const downloadFile = (url, filename) => {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    };
-
-    const downloadPdf = () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'px', 'a4');
-        const img = document.getElementById('resultImage');
-        const imgWidth = doc.internal.pageSize.getWidth();
-        const imgHeight = (img.height * imgWidth) / img.width;
-        doc.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight);
-        doc.save('assignment.pdf');
-    };
-
-    const downloadDocx = (imageBlob) => {
-        const doc = new docx.Document({
-            sections: [{
-                children: [
-                    new docx.Paragraph({
-                        children: [
-                            new docx.ImageRun({
-                                data: imageBlob,
-                                transformation: { width: 600, height: 848 }
-                            })
-                        ]
-                    })
-                ]
-            }]
-        });
-        docx.Packer.toBlob(doc).then(blob => {
-            const url = URL.createObjectURL(blob);
-            downloadFile(url, 'assignment.docx');
-            URL.revokeObjectURL(url);
-        });
-    };
+    // --- DOWNLOAD HANDLERS (No changes needed here) ---
+    const downloadFile = (url, filename) => { const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); };
+    const downloadPdf = () => { const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'px', 'a4'); const img = document.getElementById('resultImage'); const imgWidth = doc.internal.pageSize.getWidth(); const imgHeight = (img.height * imgWidth) / img.width; doc.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight); doc.save('assignment.pdf'); };
+    const downloadDocx = (imageBlob) => { const doc = new docx.Document({ sections: [{ children: [ new docx.Paragraph({ children: [ new docx.ImageRun({ data: imageBlob, transformation: { width: 600, height: 848 } }) ] }) ] }] }); docx.Packer.toBlob(doc).then(blob => { const url = URL.createObjectURL(blob); downloadFile(url, 'assignment.docx'); URL.revokeObjectURL(url); }); };
 
     // --- INITIALIZE THE PAGE ---
     navigateToStep(1);
