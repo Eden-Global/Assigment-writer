@@ -9,10 +9,8 @@ import io
 app = Flask(__name__)
 CORS(app)
 
-# This function is now a powerful document renderer
 def create_formatted_handwriting(editor_content, paper_url, font_url, ink_color_name, paper_type):
     try:
-        # Asset downloading is the same
         paper_response = requests.get(paper_url)
         paper_response.raise_for_status()
         paper_image = Image.open(io.BytesIO(paper_response.content)).convert("RGBA")
@@ -24,7 +22,6 @@ def create_formatted_handwriting(editor_content, paper_url, font_url, ink_color_
         draw = ImageDraw.Draw(paper_image)
         width, height = paper_image.size
         
-        # --- Page Layout Rules (same as before) ---
         is_lined_paper = (paper_type == "A4 Sheet Lined")
         if is_lined_paper:
             top_margin, line_spacing, font_size = 160, 41.5, 36
@@ -35,50 +32,37 @@ def create_formatted_handwriting(editor_content, paper_url, font_url, ink_color_
         right_margin = width - left_margin
         y_text = top_margin
 
-        # --- Font and Color Setup (same as before) ---
         INK_COLORS = {"Black": (0, 0, 0), "Blue": (0, 74, 173), "Red": (255, 0, 0)}
         font = ImageFont.truetype(font_data, size=font_size)
         ink_color = INK_COLORS.get(ink_color_name, (0, 0, 0))
 
-        # --- *** THE NEW GENIUS LOGIC: PARSING THE EDITOR CONTENT *** ---
-        # The 'editor_content' is a list of operations (called a Delta)
-        for op in editor_content['ops']:
+        for op in editor_content.get('ops', []):
             text_to_draw = op.get('insert', '')
             attributes = op.get('attributes', {}) or {}
-            alignment = attributes.get('align', 'left') # Default to left align
+            alignment = attributes.get('align', 'left')
 
-            # Split text into individual lines to handle alignment for each one
             lines = text_to_draw.split('\n')
             
             for i, line in enumerate(lines):
-                # We only process non-empty lines, newlines are handled separately
                 if line:
-                    # Calculate the width of the current line of text
                     box = draw.textbbox((0, 0), line, font=font)
-                    line_width = box[2] - box[0]
-                    line_height = box[3] - box[1]
+                    line_width, line_height = box[2] - box[0], box[3] - box[1]
 
-                    # Calculate the X position based on alignment
-                    x_pos = left_margin # Default to left
+                    x_pos = left_margin
                     if alignment == 'center':
                         x_pos = (width / 2) - (line_width / 2)
                     elif alignment == 'right':
                         x_pos = right_margin - line_width
 
-                    # Calculate Y position to sit on the line
                     final_y_position = y_text - line_height
-                    
-                    # Draw the text at the calculated position!
                     draw.text((x_pos, final_y_position), line, font=font, fill=ink_color)
 
-                # If this isn't the last line segment from the split, it means there was a newline
                 if i < len(lines) - 1:
-                    y_text += line_spacing # Move down for the next line
-                    if y_text > height - (top_margin / 2): break # Stop if off page
+                    y_text += line_spacing
+                    if y_text > height - (top_margin / 2): break
             
-            if y_text > height - (top_margin / 2): break # Stop if off page
+            if y_text > height - (top_margin / 2): break
 
-        # In-memory saving is the same
         img_io = io.BytesIO()
         paper_image.save(img_io, 'PNG')
         img_io.seek(0)
@@ -91,9 +75,8 @@ def create_formatted_handwriting(editor_content, paper_url, font_url, ink_color_
 @app.route('/api/generate', methods=['POST'])
 def generate_handler():
     data = request.get_json()
-    # We now expect 'editorContent' instead of 'text'
     if not data or 'editorContent' not in data:
-        return jsonify({"success": False, "error": "Missing editor content."}), 400
+        return jsonify({"success": False, "error": "Missing editor content from the website."}), 400
 
     result_stream = create_formatted_handwriting(
         editor_content=data.get('editorContent'),
@@ -102,9 +85,11 @@ def generate_handler():
         ink_color_name=data.get('ink'),
         paper_type=data.get('paperType')
     )
-    # ... rest of the function is the same ...
+    if result_stream:
+        return send_file(result_stream, mimetype='image/png')
+    else:
+        return jsonify({"success": False, "error": "Server failed to create the image. Check Render logs for details."}), 500
 
-# Health check route is the same
 @app.route('/')
 def home():
-    # ...
+    return "<h1>Assignment Writer API is alive! Rich Text Version 2.0</h1>", 200
