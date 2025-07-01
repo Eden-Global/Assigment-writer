@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'align': [] }]] }
     });
 
-    // --- THE NEW BULLETPROOF CLICK HANDLER ---
+    // --- BULLETPROOF CLICK HANDLER ---
     generateBtn.addEventListener('click', async () => {
-        // STEP 1: Immediately show the loading animation for instant user feedback.
+        // STEP 1: Immediately show loading animation
         formContainer.classList.add('hidden');
         resultDiv.innerHTML = '';
         resultDiv.classList.add('hidden');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         generateBtn.disabled = true;
 
         try {
-            // STEP 2: Validate all inputs with "Guard Clauses".
+            // STEP 2: Validate all inputs
             const selectedPaper = document.querySelector('input[name="paper"]:checked');
             if (!selectedPaper) throw new Error("Please select a Paper Style.");
 
@@ -42,12 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedHandwriting = document.querySelector('input[name="handwriting"]:checked');
             if (!selectedHandwriting) throw new Error("Please select a Handwriting Style.");
             
-            // Check if the editor has any text. Quill represents an empty editor with a length of 1.
             if (quill.getLength() <= 1) {
-                throw new Error("The text editor cannot be empty.");
+                throw new Error("The Mission Briefing cannot be empty.");
             }
 
-            // STEP 3: If all validation passes, gather the data.
+            // STEP 3: Gather data if validation passes
             const paperType = selectedPaper.value;
             const paperUrl = (paperType === 'A4 Sheet Lined') ? linedPaperUrl : paperImageUrl;
             const editorContent = quill.getContents();
@@ -60,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 paperUrl: paperUrl
             };
 
-            // STEP 4: Call the API (this part was already good).
+            // STEP 4: Call the API
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -79,14 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageBlob = await response.blob();
             const imageUrl = URL.createObjectURL(imageBlob);
 
-            // STEP 5: Display the results (this part was also good).
+            // STEP 5: Display results
             displayResults(imageUrl, imageBlob);
 
         } catch (error) {
-            // If any error happens at any step, display it clearly.
             displayError(error.message);
         } finally {
-            // ALWAYS re-enable the button and hide loading, no matter what.
             loadingDiv.classList.add('hidden');
             generateBtn.disabled = false;
         }
@@ -95,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Helper function to display results ---
     function displayResults(imageUrl, imageBlob) {
         resultDiv.innerHTML = `
-            <h2>Here is your assignment!</h2>
+            <h2>Mission Complete.</h2>
+            <p style="color: #a0a0a0; margin-top: -10px; margin-bottom: 20px;">The document has been executed successfully.</p>
             <img src="${imageUrl}" alt="Generated Handwritten Assignment" id="resultImage">
             <div class="download-options">
                 <button id="downloadPngBtn" class="download-btn btn-png">Download PNG</button>
@@ -105,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         resultDiv.classList.remove('hidden');
 
-        // Attach listeners for the new download buttons
         document.getElementById('downloadPngBtn').addEventListener('click', () => {
              const a = document.createElement('a'); a.href = imageUrl; a.download = 'assignment.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
         });
@@ -122,6 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayError(message) {
         resultDiv.innerHTML = `<p style="color: red;"><strong>Error:</strong> ${message}</p>`;
         resultDiv.classList.remove('hidden');
-        formContainer.classList.remove('hidden'); // Show the form again to allow user to fix the issue
+        formContainer.classList.remove('hidden');
     }
 });
