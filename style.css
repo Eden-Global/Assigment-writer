@@ -2,7 +2,7 @@
     --background-color: #121212;
     --container-color: #1e1e1e;
     --text-color: #f1f1f1;
-    --accent-color: #3498db; /* Professional Sky Blue */
+    --accent-color: #3498db;
     --accent-glow: rgba(52, 152, 219, 0.7);
     --border-color: #333;
     --success-color: #2ecc71;
@@ -11,9 +11,8 @@
     --font-mono: 'Roboto Mono', monospace;
 }
 
-/* --- BASE STYLES & LAYOUT FIX --- */
 * {
-    box-sizing: border-box; /* Ensures padding doesn't break layouts */
+    box-sizing: border-box;
 }
 
 body {
@@ -21,7 +20,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     margin: 0;
-    padding: 15px; /* Safe space around the container on mobile */
+    padding: 15px;
 }
 
 .container {
@@ -32,131 +31,60 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     width: 100%;
     max-width: 800px;
-    margin: 20px auto; /* THE FIX: This centers the container properly */
+    margin: 20px auto;
     position: relative;
-    padding-bottom: 80px; /* Add space at the bottom to avoid character overlap */
+    padding-bottom: 80px;
 }
 
-/* --- STEP-BY-STEP & WELCOME TEXT --- */
 .form-step { display: none; opacity: 0; transition: opacity 0.5s ease-in-out; }
 .form-step.active { display: block; opacity: 1; }
-h1#welcome-text {
-    font-family: var(--font-mono);
-    font-size: 1.5em;
-    font-weight: 700;
-    text-align: center;
-    margin: 0 auto 25px auto;
-    line-height: 1.4;
-}
-.form-step h2 {
-    text-align: center;
-    font-family: var(--font-mono);
-    margin-bottom: 25px;
-    font-size: 1.5em;
-}
+h1#welcome-text { font-family: var(--font-mono); font-size: 1.5em; font-weight: 700; text-align: center; margin: 0 auto 25px auto; line-height: 1.4; }
+.form-step h2 { text-align: center; font-family: var(--font-mono); margin-bottom: 25px; font-size: 1.5em; }
 
-/* --- RICH TEXT EDITOR (QUILL) --- */
 #editor-container { background-color: #f1f1f1; color: #1a1a1a; border-radius: 4px; border: 1px solid var(--border-color); }
 #editor { min-height: 250px; }
 .ql-toolbar { border-bottom: 1px solid var(--border-color) !important; }
 .ql-snow .ql-stroke, .ql-snow .ql-picker-label { stroke: var(--background-color); color: var(--background-color); }
 .ql-snow .ql-fill { fill: var(--background-color); }
 
-/* --- CHOICE LAYOUTS (YOUR INSTRUCTIONS) --- */
-.choice-row, .choice-grid-2x2 {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-    justify-content: center;
-}
-.choice-grid-2x2 {
-    flex-wrap: wrap; /* Allows the 2x2 grid to form */
-}
+.choice-row, .choice-grid-2x2 { display: flex; gap: 15px; margin-bottom: 30px; justify-content: center; }
+.choice-grid-2x2 { flex-wrap: wrap; }
+.choice-row label { flex: 1; min-width: 80px; }
+.choice-grid-2x2 label { flex-basis: 45%; }
 
-.choice-row label {
-    flex: 1; /* Makes items in a row share space */
-    min-width: 80px; /* Prevents items from becoming too small */
-}
-.choice-grid-2x2 label {
-    flex-basis: 45%; /* Two items per row with some gap */
-}
-
-/* --- STYLING FOR ALL CHOICES --- */
-label {
-    position: relative;
-    cursor: pointer;
-    text-align: center;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 10px;
-    transition: all 0.3s ease;
-}
+label { position: relative; cursor: pointer; text-align: center; border: 2px solid var(--border-color); border-radius: 8px; padding: 10px; transition: all 0.3s ease; }
 label:hover { border-color: var(--accent-color); transform: translateY(-3px); }
 input[type="radio"] { position: absolute; opacity: 0; }
-img {
-    width: 100%;
-    max-height: 150px;
-    object-fit: contain; /* Use contain to see the whole image */
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
+img { width: 100%; max-height: 150px; object-fit: contain; border-radius: 4px; margin-bottom: 10px; }
 span { font-weight: 500; font-size: 14px; }
-label:has(input[type="radio"]:checked) {
-    border-color: var(--accent-color);
-    background: rgba(52, 152, 219, 0.1);
-    box-shadow: 0 0 15px 2px var(--accent-glow);
-}
+label:has(input[type="radio"]:checked) { border-color: var(--accent-color); background: rgba(52, 152, 219, 0.1); box-shadow: 0 0 15px 2px var(--accent-glow); }
 
-/* --- BUTTONS --- */
-.btn-next, #generateBtn {
-    width: 100%; padding: 15px; font-size: 16px; font-family: var(--font-mono);
-    font-weight: 700; color: var(--text-color); background-color: var(--accent-color);
-    border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;
-    transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
-}
-.btn-next:hover, #generateBtn:hover {
-    background-color: #f1f1f1; color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow);
-}
+.btn-next, #generateBtn { width: 100%; padding: 15px; font-size: 16px; font-family: var(--font-mono); font-weight: 700; color: var(--text-color); background-color: var(--accent-color); border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
+.btn-next:hover, #generateBtn:hover { background-color: #f1f1f1; color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); }
 
-/* --- CHARACTER VIGNETTES (MOBILE & DESKTOP) --- */
-#character-vignette {
-    position: fixed;
-    width: 120px; /* Smaller size for mobile */
-    height: 160px;
-    bottom: 5px;
-    right: 5px;
-    pointer-events: none;
-    z-index: 100;
-}
-#character-vignette img {
-    position: absolute; bottom: 0; right: 0; max-width: 100%; max-height: 100%;
-    opacity: 0; transform: translateX(50px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-}
+#character-vignette { position: fixed; width: 120px; height: 160px; bottom: 5px; right: 5px; pointer-events: none; z-index: 100; }
+#character-vignette img { position: absolute; bottom: 0; right: 0; max-width: 100%; max-height: 100%; opacity: 0; transform: translateX(50px); transition: opacity 0.7s ease, transform 0.7s ease; }
 #character-vignette img.active { opacity: 1; transform: translateX(0); }
 
-/* --- LOADING & RESULT STYLES --- */
 .hidden { display: none !important; }
-#loading { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; }
-#loading img { max-width: 200px; }
-#loading p, #result h2 { font-family: var(--font-mono); text-transform: uppercase; }
+
+#loading { display: flex; flex-direction: column; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(18, 18, 18, 0.9); z-index: 200; }
+#loading img { width: 90%; max-width: 400px; height: auto; object-fit: contain; border-radius: 8px; }
+#loading p { font-family: var(--font-mono); text-transform: uppercase; margin-top: 20px; text-align: center; color: var(--text-color); }
+.server-note { font-size: 0.8em; color: #888; text-transform: none; margin-top: 5px; }
+
 #result { text-align: center; margin-top: 30px; }
 #result h2 { color: var(--success-color); }
 #result .error-message { color: var(--error-color); }
 #result img { max-width: 100%; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 20px; }
+
 .download-options { margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
 .download-btn { padding: 10px 20px; font-size: 14px; color: white; text-decoration: none; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; transition: transform 0.2s; text-transform: uppercase; }
 .btn-png { background-color: #4CAF50; }
 .btn-pdf { background-color: #e63946; }
 .btn-doc { background-color: var(--accent-color); }
 
-/* --- LARGER SCREEN ADJUSTMENTS --- */
 @media (min-width: 768px) {
     h1#welcome-text, .form-step h2 { font-size: 1.8em; }
-    #character-vignette {
-        width: 250px; /* Larger size for desktop */
-        height: 350px;
-        bottom: 20px;
-        right: 20px;
-    }
-}
+    #character-vignette { width: 250px; height: 350px; bottom: 20px; right: 20px; }
+      }
