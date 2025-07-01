@@ -40,7 +40,7 @@ def create_handwriting_in_memory(text, paper_url, font_url, ink_color_name, pape
 
         # 5. PREPARE TO WRITE TEXT
         INK_COLORS = {"Black": (0, 0, 0), "Blue": (0, 74, 173), "Red": (255, 0, 0)}
-        font_size = 48
+        font_size = 55
         font = ImageFont.truetype(font_data, size=font_size)
         ink_color = INK_COLORS.get(ink_color_name, (0, 0, 0))
         y_text = top_margin
