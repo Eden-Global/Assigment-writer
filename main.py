@@ -1,4 +1,5 @@
 # main.py - THE ULTIMATE DOCUMENT GENERATOR VERSION
+# Tuned for bigger, clearer handwriting.
 
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
@@ -22,11 +23,15 @@ def create_formatted_handwriting(editor_content, paper_url, font_url, ink_color_
         draw = ImageDraw.Draw(paper_image)
         width, height = paper_image.size
         
+        # === THE BIG HANDWRITING FIX IS HERE ===
         is_lined_paper = (paper_type == "A4 Sheet Lined")
         if is_lined_paper:
-            top_margin, line_spacing, font_size = 160, 41.5, 36
+            # Increased font size slightly to better fit the lines. Line spacing is fixed by the paper.
+            top_margin, line_spacing, font_size = 160, 41.5, 39
         else:
-            top_margin, line_spacing, font_size = 150, 65, 55
+            # Increased font size and line spacing for better readability on plain paper.
+            top_margin, line_spacing, font_size = 150, 72, 62
+        # ==========================================
         
         left_margin = 100
         right_margin = width - left_margin
@@ -92,4 +97,4 @@ def generate_handler():
 
 @app.route('/')
 def home():
-    return "<h1>Assignment Writer API is alive! Rich Text Version 2.0</h1>", 200
+    return "<h1>Shahil Assignment Writer AI API is running!</h1>", 200
