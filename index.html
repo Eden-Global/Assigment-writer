@@ -92,7 +92,6 @@
                 </label>
                 <label>
                     <input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required>
-                    <!-- THE FIX: CORRECTED IMAGE LINK BELOW -->
                     <img src="https://iili.io/F7vaVdx.jpg" alt="Handwriting 4">
                     <span>The Specialist (Cursive)</span>
                 </label>
@@ -101,7 +100,7 @@
         </div>
     </div>
 
-    <!-- ===== LOADING & RESULT (OUTSIDE THE MAIN CONTAINER) ===== -->
+    <!-- ===== LOADING & RESULT ===== -->
     <div id="loading" class="hidden">
         <img src="Assets/images/writing_animation.gif?v=2" alt="Writing Animation">
         <p>Generating your document... <br><span class="server-note">(First time may take up to a minute)</span></p>
@@ -109,10 +108,14 @@
     <div id="result" class="hidden"></div>
 
     <!-- ===== ANIMATED CHARACTER VIGNETTES ===== -->
-    <div id="character-vignette">
+    <div id="character-vignette-right">
         <img id="char-professor" src="https://iili.io/F7eXa3X.png" alt="Professor">
         <img id="char-walter" src="https://iili.io/F7evPpt.png" alt="Walter White">
+        <img id="char-squidgame" src="https://iili.io/F7UUjxp.png" alt="Squid Game Hero">
         <img id="char-steve" src="https://iili.io/F7eX74t.png" alt="Steve Harrington">
+    </div>
+    <div id="character-vignette-left">
+        <img id="char-berlin" src="https://iili.io/F7U62B2.png" alt="Berlin">
     </div>
 
     <!-- External Libraries -->
@@ -121,4 +124,4 @@
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="script.js"></script>
 </body>
-    </html>
+            </html>
