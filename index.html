@@ -24,10 +24,9 @@
         <form id="assignmentForm">
             <fieldset>
                 <legend>Step 1: Write and Format Your Text</legend>
-                
-                <!-- This is the container for our new rich text editor -->
                 <div id="editor-container">
                     <div id="editor">
+                        <!-- Example content for the editor -->
                         <p>To,</p>
                         <p>The Principal,</p>
                         <p>[School Name],</p>
@@ -45,18 +44,63 @@
                         <p class="ql-align-right">[Your Class/Roll No.]</p>
                     </div>
                 </div>
-
             </fieldset>
 
-            <!-- Other fieldsets for paper, ink, handwriting remain the same -->
-            <fieldset> <legend>Step 2: Choose Paper Style</legend> <!-- ... content ... --> </fieldset>
-            <fieldset> <legend>Step 3: Choose Ink Color</legend> <!-- ... content ... --> </fieldset>
-            <fieldset> <legend>Step 4: Select Handwriting Style</legend> <!-- ... content ... --> </fieldset>
+            <!-- ======================================================= -->
+            <!-- === THIS IS THE MISSING CONTENT THAT IS NOW FIXED === -->
+            <!-- ======================================================= -->
+            <fieldset>
+                <legend>Step 2: Choose Paper Style</legend>
+                <div class="radio-group">
+                    <label><input type="radio" name="paper" value="A4 Sheet" checked required> Plain A4 Sheet</label>
+                    <label><input type="radio" name="paper" value="A4 Sheet Lined"> Lined A4 Sheet</label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Step 3: Choose Ink Color</legend>
+                <div class="avatar-group">
+                    <input type="radio" id="inkBlue" name="ink" value="Blue" checked required>
+                    <label for="inkBlue" class="avatar-label">
+                        <img src="https://i.ibb.co/L5Bf6f0/blue-avatar.png" alt="Blue Ink Avatar">
+                        <div class="avatar-text">Blue</div>
+                    </label>
+
+                    <input type="radio" id="inkBlack" name="ink" value="Black" required>
+                    <label for="inkBlack" class="avatar-label">
+                        <img src="https://iili.io/F7HCpqP.md.png" alt="Black Ink Avatar">
+                        <div class="avatar-text">Black</div>
+                    </label>
+
+                    <input type="radio" id="inkRed" name="ink" value="Red" required>
+                    <label for="inkRed" class="avatar-label">
+                        <img src="https://iili.io/F7HouF1.md.png" alt="Red Ink Avatar">
+                        <div class="avatar-text">Red</div>
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Step 4: Select Handwriting Style</legend>
+                <div class="radio-group">
+                    <label><input type="radio" name="handwriting" value="Handwriting 1" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting1.ttf" checked required> Style 1 (Neat)</label>
+                    <label><input type="radio" name="handwriting" value="Handwriting 2" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting2.ttf" required> Style 2 (Casual)</label>
+                    <label><input type="radio" name="handwriting" value="Handwriting 3" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting3.ttf" required> Style 3 (Bold)</label>
+                    <label><input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required> Style 4 (Cursive)</label>
+                </div>
+            </fieldset>
+            <!-- ======================================================= -->
+            <!-- ================= END OF FIXED SECTION ================ -->
+            <!-- ======================================================= -->
 
             <button type="submit" id="generateBtn">Generate Assignment</button>
         </form>
 
-        <div id="loading" class="hidden"> <!-- ... content ... --> </div>
+        <div id="loading" class="hidden">
+            <img src="Assets/images/writing_animation.gif" alt="Writing Animation">
+            <p>Your agent is writing the assignment...</p>
+        </div>
+
         <div id="result" class="hidden"></div>
     </div>
 
@@ -68,4 +112,4 @@
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="script.js"></script>
 </body>
-</html>
+    </html>
