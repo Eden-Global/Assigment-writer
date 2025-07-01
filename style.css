@@ -11,103 +11,96 @@
     --font-mono: 'Roboto Mono', monospace;
 }
 
-/* --- BASE STYLES (MOBILE-FIRST) --- */
+/* --- BASE STYLES & LAYOUT FIX --- */
+* {
+    box-sizing: border-box; /* Ensures padding doesn't break layouts */
+}
+
 body {
     font-family: var(--font-primary);
     background-color: var(--background-color);
     color: var(--text-color);
     margin: 0;
-    padding: 15px; /* Less padding for mobile */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align to top for smaller screens */
-    min-height: 100vh;
+    padding: 15px; /* Safe space around the container on mobile */
 }
 
 .container {
     background-color: var(--container-color);
-    padding: 20px; /* Less padding for mobile */
+    padding: 20px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     width: 100%;
     max-width: 800px;
-    box-sizing: border-box;
+    margin: 20px auto; /* THE FIX: This centers the container properly */
     position: relative;
+    padding-bottom: 80px; /* Add space at the bottom to avoid character overlap */
 }
 
-/* --- TYPEWRITER ANIMATION (RESPONSIVE) --- */
-#welcome-text {
+/* --- STEP-BY-STEP & WELCOME TEXT --- */
+.form-step { display: none; opacity: 0; transition: opacity 0.5s ease-in-out; }
+.form-step.active { display: block; opacity: 1; }
+h1#welcome-text {
     font-family: var(--font-mono);
-    font-size: 1.5em; /* Smaller font for mobile */
+    font-size: 1.5em;
     font-weight: 700;
-    color: var(--text-color);
     text-align: center;
     margin: 0 auto 25px auto;
-    letter-spacing: .05em;
     line-height: 1.4;
-    /* Animation remains the same, but the element can now wrap text */
-}
-
-/* --- STEP-BY-STEP FORM STYLES --- */
-.form-step {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-.form-step.active {
-    display: block;
-    opacity: 1;
 }
 .form-step h2 {
     text-align: center;
     font-family: var(--font-mono);
     margin-bottom: 25px;
-    color: var(--text-color);
-    font-size: 1.5em; /* Smaller for mobile */
+    font-size: 1.5em;
 }
 
 /* --- RICH TEXT EDITOR (QUILL) --- */
 #editor-container { background-color: #f1f1f1; color: #1a1a1a; border-radius: 4px; border: 1px solid var(--border-color); }
-#editor { min-height: 200px; }
+#editor { min-height: 250px; }
 .ql-toolbar { border-bottom: 1px solid var(--border-color) !important; }
 .ql-snow .ql-stroke, .ql-snow .ql-picker-label { stroke: var(--background-color); color: var(--background-color); }
 .ql-snow .ql-fill { fill: var(--background-color); }
 
-/* --- CHOICE GRID (MOBILE-FIRST: 1 Column) --- */
-.choice-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Default to a single column */
+/* --- CHOICE LAYOUTS (YOUR INSTRUCTIONS) --- */
+.choice-row, .choice-grid-2x2 {
+    display: flex;
     gap: 15px;
     margin-bottom: 30px;
+    justify-content: center;
 }
-.choice-grid label {
+.choice-grid-2x2 {
+    flex-wrap: wrap; /* Allows the 2x2 grid to form */
+}
+
+.choice-row label {
+    flex: 1; /* Makes items in a row share space */
+    min-width: 80px; /* Prevents items from becoming too small */
+}
+.choice-grid-2x2 label {
+    flex-basis: 45%; /* Two items per row with some gap */
+}
+
+/* --- STYLING FOR ALL CHOICES --- */
+label {
     position: relative;
     cursor: pointer;
     text-align: center;
     border: 2px solid var(--border-color);
     border-radius: 8px;
-    padding: 15px;
+    padding: 10px;
     transition: all 0.3s ease;
 }
-.choice-grid label:hover {
-    border-color: var(--accent-color);
-    transform: translateY(-3px);
-}
-.choice-grid input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-}
-.choice-grid img {
+label:hover { border-color: var(--accent-color); transform: translateY(-3px); }
+input[type="radio"] { position: absolute; opacity: 0; }
+img {
     width: 100%;
-    max-height: 180px;
-    object-fit: cover;
+    max-height: 150px;
+    object-fit: contain; /* Use contain to see the whole image */
     border-radius: 4px;
     margin-bottom: 10px;
 }
-.choice-grid span {
-    font-weight: 500;
-}
+span { font-weight: 500; font-size: 14px; }
 label:has(input[type="radio"]:checked) {
     border-color: var(--accent-color);
     background: rgba(52, 152, 219, 0.1);
@@ -116,113 +109,54 @@ label:has(input[type="radio"]:checked) {
 
 /* --- BUTTONS --- */
 .btn-next, #generateBtn {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    color: var(--text-color);
-    background-color: var(--accent-color);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    width: 100%; padding: 15px; font-size: 16px; font-family: var(--font-mono);
+    font-weight: 700; color: var(--text-color); background-color: var(--accent-color);
+    border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+    transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
 }
 .btn-next:hover, #generateBtn:hover {
-    background-color: #f1f1f1;
-    color: var(--accent-color);
-    box-shadow: 0 0 15px var(--accent-glow);
+    background-color: #f1f1f1; color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow);
 }
 
-/* --- CHARACTER VIGNETTES (HIDDEN ON MOBILE) --- */
+/* --- CHARACTER VIGNETTES (MOBILE & DESKTOP) --- */
 #character-vignette {
-    display: none; /* Hide by default on mobile */
+    position: fixed;
+    width: 120px; /* Smaller size for mobile */
+    height: 160px;
+    bottom: 5px;
+    right: 5px;
+    pointer-events: none;
+    z-index: 100;
 }
+#character-vignette img {
+    position: absolute; bottom: 0; right: 0; max-width: 100%; max-height: 100%;
+    opacity: 0; transform: translateX(50px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+#character-vignette img.active { opacity: 1; transform: translateX(0); }
 
 /* --- LOADING & RESULT STYLES --- */
 .hidden { display: none !important; }
 #loading { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; }
-#loading img { max-width: 200px; margin-bottom: 20px; }
+#loading img { max-width: 200px; }
 #loading p, #result h2 { font-family: var(--font-mono); text-transform: uppercase; }
 #result { text-align: center; margin-top: 30px; }
 #result h2 { color: var(--success-color); }
 #result .error-message { color: var(--error-color); }
 #result img { max-width: 100%; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 20px; }
-
 .download-options { margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
 .download-btn { padding: 10px 20px; font-size: 14px; color: white; text-decoration: none; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; transition: transform 0.2s; text-transform: uppercase; }
-.download-btn:hover { transform: scale(1.05); }
 .btn-png { background-color: #4CAF50; }
 .btn-pdf { background-color: #e63946; }
 .btn-doc { background-color: var(--accent-color); }
 
-
-/* =============================================== */
-/* --- TABLET & LARGER SCREEN STYLES (600px+) --- */
-/* =============================================== */
-@media (min-width: 600px) {
-    body {
-        align-items: center; /* Center vertically on larger screens */
-    }
-    .container {
-        padding: 30px 40px;
-    }
-    #welcome-text, .form-step h2 {
-        font-size: 1.8em;
-    }
-    /* Two-column grids */
-    .choice-grid.grid-2,
-    .choice-grid.grid-2x2 {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-
-/* =============================================== */
-/* --- LARGER TABLET STYLES (800px+) --- */
-/* =============================================== */
-@media (min-width: 800px) {
-     /* Three-column grid */
-    .choice-grid.grid-3 {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-
-/* =============================================== */
-/* --- DESKTOP STYLES (1024px+) --- */
-/* =============================================== */
-@media (min-width: 1024px) {
-    #welcome-text {
-        font-size: 2em;
-    }
-    /* Show the character vignette on large screens */
+/* --- LARGER SCREEN ADJUSTMENTS --- */
+@media (min-width: 768px) {
+    h1#welcome-text, .form-step h2 { font-size: 1.8em; }
     #character-vignette {
-        display: block; /* Show the container */
-        position: fixed;
-        bottom: 0;
-        right: 20px;
-        width: 250px;
+        width: 250px; /* Larger size for desktop */
         height: 350px;
-        pointer-events: none;
+        bottom: 20px;
+        right: 20px;
     }
-    #character-vignette img {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        max-width: 100%;
-        max-height: 100%;
-        opacity: 0;
-        transform: translateX(50px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    #character-vignette img.active {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    }
+}
