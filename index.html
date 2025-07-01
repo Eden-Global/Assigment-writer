@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shahil Assignment Writing AI</title>
 
-    <!-- Google Fonts, Icons, Quill CSS... -->
+    <!-- Google Fonts, Icons, Quill CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
             <button id="btn-step-1" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
         </div>
 
-        <!-- STEP 2: PAPER SELECTION (Fixed Image Links) -->
+        <!-- STEP 2: PAPER SELECTION -->
         <div id="step-2" class="form-step">
             <h2>Select Your Sheet</h2>
             <div class="choice-row">
@@ -48,7 +48,7 @@
             <button id="btn-step-2" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
         </div>
 
-        <!-- STEP 3: INK SELECTION (Fixed Image Links) -->
+        <!-- STEP 3: INK SELECTION -->
         <div id="step-3" class="form-step">
             <h2>Choose Your Ink</h2>
             <div class="choice-row">
@@ -71,7 +71,7 @@
             <button id="btn-step-3" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
         </div>
 
-        <!-- STEP 4: HANDWRITING SELECTION (Fixed Image Links) -->
+        <!-- STEP 4: HANDWRITING SELECTION -->
         <div id="step-4" class="form-step">
             <h2>Select Your Handwriting Style</h2>
             <div class="choice-grid-2x2">
@@ -92,7 +92,8 @@
                 </label>
                 <label>
                     <input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required>
-                    <img src="https://iili.io/F7vA79s.png" alt="Handwriting 4">
+                    <!-- THE FIX: CORRECTED IMAGE LINK BELOW -->
+                    <img src="https://iili.io/F7vaVdx.jpg" alt="Handwriting 4">
                     <span>The Specialist (Cursive)</span>
                 </label>
             </div>
@@ -100,11 +101,14 @@
         </div>
     </div>
 
-    <!-- ===== LOADING & RESULT (MOVED OUTSIDE) ===== -->
-    <div id="loading" class="hidden"><img src="Assets/images/writing_animation.gif" alt="Writing Animation"><p>Generating your document...</p></div>
+    <!-- ===== LOADING & RESULT (OUTSIDE THE MAIN CONTAINER) ===== -->
+    <div id="loading" class="hidden">
+        <img src="Assets/images/writing_animation.gif?v=2" alt="Writing Animation">
+        <p>Generating your document... <br><span class="server-note">(First time may take up to a minute)</span></p>
+    </div>
     <div id="result" class="hidden"></div>
 
-    <!-- ===== ANIMATED CHARACTER VIGNETTES (Fixed Image Links) ===== -->
+    <!-- ===== ANIMATED CHARACTER VIGNETTES ===== -->
     <div id="character-vignette">
         <img id="char-professor" src="https://iili.io/F7eXa3X.png" alt="Professor">
         <img id="char-walter" src="https://iili.io/F7evPpt.png" alt="Walter White">
