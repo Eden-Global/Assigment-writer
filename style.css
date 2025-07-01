@@ -11,48 +11,43 @@
     --font-mono: 'Roboto Mono', monospace;
 }
 
-/* --- BASE STYLES --- */
+/* --- BASE STYLES (MOBILE-FIRST) --- */
 body {
     font-family: var(--font-primary);
     background-color: var(--background-color);
     color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding: 15px; /* Less padding for mobile */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align to top for smaller screens */
     min-height: 100vh;
-    overflow: hidden; /* Prevents scrollbars from flashing */
 }
 
 .container {
     background-color: var(--container-color);
-    padding: 30px 40px;
+    padding: 20px; /* Less padding for mobile */
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-    max-width: 800px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     width: 100%;
+    max-width: 800px;
     box-sizing: border-box;
     position: relative;
 }
 
-/* --- TYPEWRITER ANIMATION --- */
+/* --- TYPEWRITER ANIMATION (RESPONSIVE) --- */
 #welcome-text {
     font-family: var(--font-mono);
-    font-size: 2em;
+    font-size: 1.5em; /* Smaller font for mobile */
     font-weight: 700;
     color: var(--text-color);
-    overflow: hidden;
-    border-right: .15em solid var(--accent-color);
-    white-space: nowrap;
+    text-align: center;
     margin: 0 auto 25px auto;
-    letter-spacing: .1em;
-    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-    max-width: max-content;
+    letter-spacing: .05em;
+    line-height: 1.4;
+    /* Animation remains the same, but the element can now wrap text */
 }
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--accent-color); } }
 
 /* --- STEP-BY-STEP FORM STYLES --- */
 .form-step {
@@ -69,25 +64,23 @@ body {
     font-family: var(--font-mono);
     margin-bottom: 25px;
     color: var(--text-color);
-    font-size: 1.8em;
+    font-size: 1.5em; /* Smaller for mobile */
 }
 
 /* --- RICH TEXT EDITOR (QUILL) --- */
 #editor-container { background-color: #f1f1f1; color: #1a1a1a; border-radius: 4px; border: 1px solid var(--border-color); }
+#editor { min-height: 200px; }
 .ql-toolbar { border-bottom: 1px solid var(--border-color) !important; }
 .ql-snow .ql-stroke, .ql-snow .ql-picker-label { stroke: var(--background-color); color: var(--background-color); }
 .ql-snow .ql-fill { fill: var(--background-color); }
 
-/* --- CHOICE GRID (for Papers, Inks, Fonts) --- */
+/* --- CHOICE GRID (MOBILE-FIRST: 1 Column) --- */
 .choice-grid {
     display: grid;
-    gap: 20px;
+    grid-template-columns: 1fr; /* Default to a single column */
+    gap: 15px;
     margin-bottom: 30px;
 }
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-2x2 { grid-template-columns: repeat(2, 1fr); }
-
 .choice-grid label {
     position: relative;
     cursor: pointer;
@@ -99,7 +92,7 @@ body {
 }
 .choice-grid label:hover {
     border-color: var(--accent-color);
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 .choice-grid input[type="radio"] {
     position: absolute;
@@ -107,7 +100,7 @@ body {
 }
 .choice-grid img {
     width: 100%;
-    max-height: 200px;
+    max-height: 180px;
     object-fit: cover;
     border-radius: 4px;
     margin-bottom: 10px;
@@ -115,23 +108,17 @@ body {
 .choice-grid span {
     font-weight: 500;
 }
-.choice-grid input[type="radio"]:checked + img, 
-.choice-grid input[type="radio"]:checked + img + span {
-    /* Styles for selected items are handled via the label's border */
-}
-.choice-grid input[type="radio"]:checked ~ img {
-    box-shadow: 0 0 15px 5px var(--accent-glow);
-}
 label:has(input[type="radio"]:checked) {
     border-color: var(--accent-color);
     background: rgba(52, 152, 219, 0.1);
+    box-shadow: 0 0 15px 2px var(--accent-glow);
 }
 
 /* --- BUTTONS --- */
 .btn-next, #generateBtn {
     width: 100%;
     padding: 15px;
-    font-size: 18px;
+    font-size: 16px;
     font-family: var(--font-mono);
     font-weight: 700;
     color: var(--text-color);
@@ -152,34 +139,15 @@ label:has(input[type="radio"]:checked) {
     box-shadow: 0 0 15px var(--accent-glow);
 }
 
-/* --- CHARACTER VIGNETTES --- */
+/* --- CHARACTER VIGNETTES (HIDDEN ON MOBILE) --- */
 #character-vignette {
-    position: fixed;
-    bottom: 0;
-    right: 20px;
-    width: 250px;
-    height: 350px;
-    pointer-events: none; /* Allows clicking through the empty space */
-}
-#character-vignette img {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    max-width: 100%;
-    max-height: 100%;
-    opacity: 0;
-    transform: translateX(50px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-}
-#character-vignette img.active {
-    opacity: 1;
-    transform: translateX(0);
+    display: none; /* Hide by default on mobile */
 }
 
 /* --- LOADING & RESULT STYLES --- */
 .hidden { display: none !important; }
 #loading { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; }
-#loading img { max-width: 250px; margin-bottom: 20px; }
+#loading img { max-width: 200px; margin-bottom: 20px; }
 #loading p, #result h2 { font-family: var(--font-mono); text-transform: uppercase; }
 #result { text-align: center; margin-top: 30px; }
 #result h2 { color: var(--success-color); }
@@ -187,8 +155,74 @@ label:has(input[type="radio"]:checked) {
 #result img { max-width: 100%; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 20px; }
 
 .download-options { margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-.download-btn { padding: 12px 25px; color: white; text-decoration: none; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; transition: transform 0.2s; text-transform: uppercase; }
+.download-btn { padding: 10px 20px; font-size: 14px; color: white; text-decoration: none; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; transition: transform 0.2s; text-transform: uppercase; }
 .download-btn:hover { transform: scale(1.05); }
 .btn-png { background-color: #4CAF50; }
 .btn-pdf { background-color: #e63946; }
 .btn-doc { background-color: var(--accent-color); }
+
+
+/* =============================================== */
+/* --- TABLET & LARGER SCREEN STYLES (600px+) --- */
+/* =============================================== */
+@media (min-width: 600px) {
+    body {
+        align-items: center; /* Center vertically on larger screens */
+    }
+    .container {
+        padding: 30px 40px;
+    }
+    #welcome-text, .form-step h2 {
+        font-size: 1.8em;
+    }
+    /* Two-column grids */
+    .choice-grid.grid-2,
+    .choice-grid.grid-2x2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* =============================================== */
+/* --- LARGER TABLET STYLES (800px+) --- */
+/* =============================================== */
+@media (min-width: 800px) {
+     /* Three-column grid */
+    .choice-grid.grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+/* =============================================== */
+/* --- DESKTOP STYLES (1024px+) --- */
+/* =============================================== */
+@media (min-width: 1024px) {
+    #welcome-text {
+        font-size: 2em;
+    }
+    /* Show the character vignette on large screens */
+    #character-vignette {
+        display: block; /* Show the container */
+        position: fixed;
+        bottom: 0;
+        right: 20px;
+        width: 250px;
+        height: 350px;
+        pointer-events: none;
+    }
+    #character-vignette img {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        max-width: 100%;
+        max-height: 100%;
+        opacity: 0;
+        transform: translateX(50px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    #character-vignette img.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
