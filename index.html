@@ -17,7 +17,6 @@
             <p>Your personal assistant for generating handwritten assignments.</p>
         </header>
 
-        <!-- The form tag is now just a container -->
         <div id="assignmentForm">
             <fieldset>
                 <legend>Step 1: Write and Format Your Text</legend>
@@ -40,9 +39,12 @@
                 <legend>Step 3: Choose Ink Color</legend>
                 <div class="avatar-group">
                     <input type="radio" id="inkBlue" name="ink" value="Blue" checked required>
-                    <label for="inkBlue" class="avatar-label"><img src="https://i.ibb.co/L5Bf6f0/blue-avatar.png" alt="Blue Ink Avatar"><div class="avatar-text">Blue</div></label>
+                    <!-- THIS IS THE NEW, WORKING BLUE AVATAR LINK -->
+                    <label for="inkBlue" class="avatar-label"><img src="https://i.ibb.co/L8yCDzC/F7-Hq3ml.png" alt="Blue Ink Avatar"><div class="avatar-text">Blue</div></label>
+                    
                     <input type="radio" id="inkBlack" name="ink" value="Black" required>
                     <label for="inkBlack" class="avatar-label"><img src="https://iili.io/F7HCpqP.md.png" alt="Black Ink Avatar"><div class="avatar-text">Black</div></label>
+                    
                     <input type="radio" id="inkRed" name="ink" value="Red" required>
                     <label for="inkRed" class="avatar-label"><img src="https://iili.io/F7HouF1.md.png" alt="Red Ink Avatar"><div class="avatar-text">Red</div></label>
                 </div>
@@ -58,7 +60,6 @@
                 </div>
             </fieldset>
 
-            <!-- THIS IS THE CRUCIAL CHANGE: type="button" instead of type="submit" -->
             <button type="button" id="generateBtn">Generate Assignment</button>
         </div>
 
@@ -71,4 +72,4 @@
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="script.js"></script>
 </body>
-        </html>
+    </html>
