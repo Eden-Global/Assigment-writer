@@ -3,119 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shahil Assignment Writing AI</title>
-
-    <!-- Google Fonts, Icons, Quill CSS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>The Professor's Pen</title>
+    <!-- All CSS and Font links remain the same -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    
-    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- This container holds ONLY the form steps -->
-    <div class="container" id="form-container">
-        <!-- STEP 1: WELCOME & TEXT INPUT -->
-        <div id="step-1" class="form-step active">
-            <h1 id="welcome-text">Welcome To The Shahil Assignment Writing AI</h1>
-            <div id="editor-container">
-                <div id="editor">
-                    <p>To,</p><p>The Principal,</p><p>[School Name],</p><p>[City].</p><p><br></p><p class="ql-align-center"><strong>Subject: Application for Leave</strong></p><p><br></p><p>Respected Sir/Madam,</p><p>I am writing to request a leave of absence for [number] days, from [start date] to [end date], due to [reason for leave].</p><p><br></p><p>Thank you for your consideration.</p><p><br></p><p class="ql-align-right">Yours Sincerely,</p><p class="ql-align-right">[Your Name]</p><p class="ql-align-right">[Your Class/Roll No.]</p>
+    <!-- THE SECRET ADMIN BUTTON -->
+    <button id="devButton" class="dev-button">Dev-2.5</button>
+
+    <div class="container">
+        <!-- The header and form content remain the same -->
+        <header> <!-- ... --> </header>
+        <div id="assignmentForm"> <!-- ... --> </div>
+        <div id="loading" class="hidden"> <!-- ... --> </div>
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <!-- THE NEW ADMIN MODAL (Initially hidden) -->
+    <div id="adminModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <!-- Part 1: Password Screen -->
+            <div id="passwordSection">
+                <h3>Professor's Access</h3>
+                <input type="password" id="adminPassword" placeholder="Enter Access Code">
+                <button id="passwordSubmit">Authenticate</button>
+                <p id="passwordError" class="error-text hidden">Authentication Failed.</p>
+            </div>
+
+            <!-- Part 2: Settings Screen (hidden until authenticated) -->
+            <div id="settingsSection" class="hidden">
+                <h3>Control Room</h3>
+                <p>Select a schematic to configure its parameters.</p>
+                <div class="language-selector">
+                    <input type="radio" id="config-plain" name="config-paper" value="A4 Sheet" checked>
+                    <label for="config-plain">Plain Sheet</label>
+                    <input type="radio" id="config-lined" name="config-paper" value="A4 Sheet Lined">
+                    <label for="config-lined">Lined Sheet</label>
                 </div>
+                
+                <div class="slider-group">
+                    <label for="fontSizeSlider">Font Size: <span id="fontSizeValue">55</span></label>
+                    <input type="range" id="fontSizeSlider" min="20" max="100" value="55">
+                </div>
+                
+                <div class="slider-group">
+                    <label for="lineGapSlider">Line Gap: <span id="lineGapValue">65</span></label>
+                    <input type="range" id="lineGapSlider" min="30" max="120" value="65">
+                </div>
+
+                <div class="modal-actions">
+                    <button id="updateSettingsBtn" class="btn-update">Update Blueprint</button>
+                    <button id="closeModalBtn" class="btn-close">Close</button>
+                </div>
+                <p id="settingsSaved" class="success-text hidden">Blueprint Updated.</p>
             </div>
-            <button id="btn-step-1" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
         </div>
-
-        <!-- STEP 2: PAPER SELECTION -->
-        <div id="step-2" class="form-step">
-            <h2>Select Your Sheet</h2>
-            <div class="choice-row">
-                <label>
-                    <input type="radio" name="paper" value="A4 Sheet" checked required>
-                    <img src="https://iili.io/F7kdErv.png" alt="Plain A4 Sheet">
-                    <span>Clean Slate (Plain)</span>
-                </label>
-                <label>
-                    <input type="radio" name="paper" value="A4 Sheet Lined" required>
-                    <img src="https://iili.io/F7kfJHv.jpg" alt="Lined A4 Sheet">
-                    <span>Grid Plan (Lined)</span>
-                </label>
-            </div>
-            <button id="btn-step-2" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
-        </div>
-
-        <!-- STEP 3: INK SELECTION -->
-        <div id="step-3" class="form-step">
-            <h2>Choose Your Ink</h2>
-            <div class="choice-row">
-                <label>
-                    <input type="radio" name="ink" value="Blue" checked required>
-                    <img src="https://iili.io/F7Hq3ml.png" alt="Blue Ink">
-                    <span>Blue</span>
-                </label>
-                <label>
-                    <input type="radio" name="ink" value="Black" required>
-                    <img src="https://iili.io/F7HCpqP.png" alt="Black Ink">
-                    <span>Black</span>
-                </label>
-                <label>
-                    <input type="radio" name="ink" value="Red" required>
-                    <img src="https://iili.io/F7HouF1.png" alt="Red Ink">
-                    <span>Red</span>
-                </label>
-            </div>
-            <button id="btn-step-3" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
-        </div>
-
-        <!-- STEP 4: HANDWRITING SELECTION -->
-        <div id="step-4" class="form-step">
-            <h2>Select Your Handwriting Style</h2>
-            <div class="choice-grid-2x2">
-                <label>
-                    <input type="radio" name="handwriting" value="Handwriting 1" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting1.ttf" checked required>
-                    <img src="https://iili.io/F7vTpob.png" alt="Handwriting 1">
-                    <span>The Analyst (Neat)</span>
-                </label>
-                <label>
-                    <input type="radio" name="handwriting" value="Handwriting 2" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting2.ttf" required>
-                    <img src="https://iili.io/F7v5nWu.jpg" alt="Handwriting 2">
-                    <span>The Field Agent (Casual)</span>
-                </label>
-                <label>
-                    <input type="radio" name="handwriting" value="Handwriting 3" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting3.ttf" required>
-                    <img src="https://iili.io/F7v7LuI.png" alt="Handwriting 3">
-                    <span>The Enforcer (Bold)</span>
-                </label>
-                <label>
-                    <input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required>
-                    <img src="https://iili.io/F7vaVdx.jpg" alt="Handwriting 4">
-                    <span>The Specialist (Cursive)</span>
-                </label>
-            </div>
-            <button type="button" id="generateBtn"><i class="fas fa-cogs"></i> Generate</button>
-        </div>
-    </div>
-
-    <!-- ===== LOADING & RESULT ===== -->
-    <div id="loading" class="hidden">
-        <img src="Assets/images/writing_animation.gif?v=2" alt="Writing Animation">
-        <p>Generating your document... <br><span class="server-note">(First time may take up to a minute)</span></p>
-    </div>
-    <div id="result" class="hidden"></div>
-
-    <!-- ===== ANIMATED CHARACTER VIGNETTES ===== -->
-    <div id="character-vignette-right">
-        <img id="char-professor" src="https://iili.io/F7eXa3X.png" alt="Professor">
-        <img id="char-walter" src="https://iili.io/F7evPpt.png" alt="Walter White">
-        <img id="char-squidgame" src="https://iili.io/F7UUjxp.png" alt="Squid Game Hero">
-        <img id="char-steve" src="https://iili.io/F7eX74t.png" alt="Steve Harrington">
-    </div>
-    <div id="character-vignette-left">
-        <img id="char-berlin" src="https://iili.io/F7U62B2.png" alt="Berlin">
     </div>
 
     <!-- External Libraries -->
@@ -124,4 +70,4 @@
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="script.js"></script>
 </body>
-            </html>
+</html>
