@@ -5,92 +5,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const GITHUB_USERNAME = 'Eden-Global';
     const REPO_NAME = 'Assigment-writer';
     const BRANCH_NAME = 'main';
-    const ADMIN_PASSWORD = 'Ansif@5964';
 
-    // --- MAIN UI SELECTORS ---
+    // --- ELEMENT SELECTORS ---
     const formContainer = document.getElementById('assignmentForm');
     const generateBtn = document.getElementById('generateBtn');
     const loadingDiv = document.getElementById('loading');
     const resultDiv = document.getElementById('result');
     
-    // --- ADMIN MODAL SELECTORS ---
-    const devButton = document.getElementById('devButton');
-    const adminModal = document.getElementById('adminModal');
-    const passwordSection = document.getElementById('passwordSection');
-    const settingsSection = document.getElementById('settingsSection');
-    const adminPasswordInput = document.getElementById('adminPassword');
-    const passwordSubmitBtn = document.getElementById('passwordSubmit');
-    const passwordError = document.getElementById('passwordError');
-    const configPaperRadios = document.querySelectorAll('input[name="config-paper"]');
-    const fontSizeSlider = document.getElementById('fontSizeSlider');
-    const lineGapSlider = document.getElementById('lineGapSlider');
-    const fontSizeValue = document.getElementById('fontSizeValue');
-    const lineGapValue = document.getElementById('lineGapValue');
-    const updateSettingsBtn = document.getElementById('updateSettingsBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const settingsSavedText = document.getElementById('settingsSaved');
+    // --- URLs ---
+    const paperImageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH_NAME}/Assets/images/A4sheet.png`;
+    const linedPaperUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH_NAME}/Assets/images/A4sheet_lined.png`;
 
-    // --- URLS & EDITOR ---
-    const paperImageUrl = `https://raw.githubusercontent.com/...`; // Shortened for brevity
-    const linedPaperUrl = `https://raw.githubusercontent.com/...`;
-    const quill = new Quill('#editor', { theme: 'snow', modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'align': [] }]] } });
-
-    // --- ADMIN PANEL LOGIC ---
-    let adminSettings = JSON.parse(localStorage.getItem('adminSettings')) || {};
-
-    function showModal() { adminModal.classList.remove('hidden'); }
-    function hideModal() { adminModal.classList.add('hidden'); }
-
-    devButton.addEventListener('click', showModal);
-    closeModalBtn.addEventListener('click', hideModal);
-
-    passwordSubmitBtn.addEventListener('click', () => {
-        if (adminPasswordInput.value === ADMIN_PASSWORD) {
-            passwordSection.classList.add('hidden');
-            settingsSection.classList.remove('hidden');
-            loadSettingsForSelectedPaper();
-        } else {
-            passwordError.classList.remove('hidden');
-            setTimeout(() => passwordError.classList.add('hidden'), 2000);
-        }
+    // --- INITIALIZE RICH TEXT EDITOR ---
+    const quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'align': [] }]] }
     });
 
-    configPaperRadios.forEach(radio => {
-        radio.addEventListener('change', loadSettingsForSelectedPaper);
-    });
-
-    function loadSettingsForSelectedPaper() {
-        const selectedPaper = document.querySelector('input[name="config-paper"]:checked').value;
-        const currentSettings = adminSettings[selectedPaper] || {};
-        
-        // Use default values if nothing is saved for this paper type
-        const defaultFontSize = selectedPaper === 'A4 Sheet Lined' ? 36 : 55;
-        const defaultLineGap = selectedPaper === 'A4 Sheet Lined' ? 41.5 : 65;
-        
-        fontSizeSlider.value = currentSettings.fontSize || defaultFontSize;
-        lineGapSlider.value = currentSettings.lineGap || defaultLineGap;
-        
-        fontSizeValue.textContent = fontSizeSlider.value;
-        lineGapValue.textContent = lineGapSlider.value;
-    }
-    
-    fontSizeSlider.addEventListener('input', (e) => fontSizeValue.textContent = e.target.value);
-    lineGapSlider.addEventListener('input', (e) => lineGapValue.textContent = e.target.value);
-
-    updateSettingsBtn.addEventListener('click', () => {
-        const selectedPaper = document.querySelector('input[name="config-paper"]:checked').value;
-        adminSettings[selectedPaper] = {
-            fontSize: parseFloat(fontSizeSlider.value),
-            lineGap: parseFloat(lineGapSlider.value)
-        };
-        localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
-        
-        settingsSavedText.classList.remove('hidden');
-        setTimeout(() => settingsSavedText.classList.add('hidden'), 2000);
-    });
-
-    // --- MAIN GENERATION LOGIC ---
+    // --- BULLETPROOF CLICK HANDLER ---
     generateBtn.addEventListener('click', async () => {
+        // STEP 1: Immediately show loading animation
         formContainer.classList.add('hidden');
         resultDiv.innerHTML = '';
         resultDiv.classList.add('hidden');
@@ -98,32 +32,55 @@ document.addEventListener('DOMContentLoaded', () => {
         generateBtn.disabled = true;
 
         try {
-            // Validation remains the same
+            // STEP 2: Validate all inputs
             const selectedPaper = document.querySelector('input[name="paper"]:checked');
             if (!selectedPaper) throw new Error("Please select a Paper Style.");
-            // ... other validations ...
+
+            const selectedInk = document.querySelector('input[name="ink"]:checked');
+            if (!selectedInk) throw new Error("Please select an Ink Color.");
+
+            const selectedHandwriting = document.querySelector('input[name="handwriting"]:checked');
+            if (!selectedHandwriting) throw new Error("Please select a Handwriting Style.");
             
+            if (quill.getLength() <= 1) {
+                throw new Error("The Mission Briefing cannot be empty.");
+            }
+
+            // STEP 3: Gather data if validation passes
             const paperType = selectedPaper.value;
             const paperUrl = (paperType === 'A4 Sheet Lined') ? linedPaperUrl : paperImageUrl;
-            
-            // **GENIUS PART**: Get custom settings from localStorage for the selected paper
-            const savedSettings = JSON.parse(localStorage.getItem('adminSettings')) || {};
-            const customSettings = savedSettings[paperType] || {};
+            const editorContent = quill.getContents();
 
             const requestData = {
-                editorContent: quill.getContents(),
+                editorContent: editorContent,
                 paperType: paperType,
-                ink: document.querySelector('input[name="ink"]:checked').value,
-                fontUrl: document.querySelector('input[name="handwriting"]:checked').dataset.url,
-                paperUrl: paperUrl,
-                // Send the custom settings to the backend!
-                fontSize: customSettings.fontSize, // Will be undefined if not set
-                lineGap: customSettings.lineGap   // Will be undefined if not set
+                ink: selectedInk.value,
+                fontUrl: selectedHandwriting.dataset.url,
+                paperUrl: paperUrl
             };
-            
-            // API call and result handling remain the same
-            // ...
-            
+
+            // STEP 4: Call the API
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData),
+            });
+
+            if (!response.ok) {
+                let errorMsg = `Server error: ${response.statusText}`;
+                try {
+                    const errorResult = await response.json();
+                    errorMsg = errorResult.error || errorMsg;
+                } catch (e) { /* Ignore */ }
+                throw new Error(errorMsg);
+            }
+
+            const imageBlob = await response.blob();
+            const imageUrl = URL.createObjectURL(imageBlob);
+
+            // STEP 5: Display results
+            displayResults(imageUrl, imageBlob);
+
         } catch (error) {
             displayError(error.message);
         } finally {
@@ -132,6 +89,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Helper functions displayResults and displayError remain the same
-    // ...
+    // --- Helper function to display results ---
+    function displayResults(imageUrl, imageBlob) {
+        resultDiv.innerHTML = `
+            <h2>Mission Complete.</h2>
+            <p style="color: #a0a0a0; margin-top: -10px; margin-bottom: 20px;">The document has been executed successfully.</p>
+            <img src="${imageUrl}" alt="Generated Handwritten Assignment" id="resultImage">
+            <div class="download-options">
+                <button id="downloadPngBtn" class="download-btn btn-png">Download PNG</button>
+                <button id="downloadPdfBtn" class="download-btn btn-pdf">Download PDF</button>
+                <button id="downloadDocBtn" class="download-btn btn-doc">Download DOCX</button>
+            </div>
+        `;
+        resultDiv.classList.remove('hidden');
+
+        document.getElementById('downloadPngBtn').addEventListener('click', () => {
+             const a = document.createElement('a'); a.href = imageUrl; a.download = 'assignment.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        });
+        document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+             const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'px', 'a4'); const img = document.getElementById('resultImage'); const imgWidth = doc.internal.pageSize.getWidth(); const imgHeight = (img.height * imgWidth) / img.width; doc.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight); doc.save('assignment.pdf');
+        });
+        document.getElementById('downloadDocBtn').addEventListener('click', () => {
+            const doc = new docx.Document({ sections: [{ children: [ new docx.Paragraph({ children: [ new docx.ImageRun({ data: imageBlob, transformation: { width: 600, height: 848 } }) ] }) ] }] });
+            docx.Packer.toBlob(doc).then(blob => { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'assignment.docx'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); });
+        });
+    }
+
+    // --- Helper function to display errors ---
+    function displayError(message) {
+        resultDiv.innerHTML = `<p style="color: red;"><strong>Error:</strong> ${message}</p>`;
+        resultDiv.classList.remove('hidden');
+        formContainer.classList.remove('hidden');
+    }
 });
