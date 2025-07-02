@@ -3,66 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Professor's Pen</title>
+    <title>Shahil Assignment Writing AI</title>
+
+    <!-- Google Fonts, Icons, Quill CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>The Professor's Pen</h1>
-            <p>"Your plan. My flawless execution."</p>
-        </header>
 
-        <div id="assignmentForm">
-            <fieldset>
-                <legend><i class="fas fa-file-alt"></i> Mission Briefing: The Intel</legend>
-                <div id="editor-container">
-                    <div id="editor">
-                        <p>To,</p><p>The Principal,</p><p>[School Name],</p><p>[City].</p><p><br></p><p class="ql-align-center"><strong>Subject: Application for Leave</strong></p><p><br></p><p>Respected Sir/Madam,</p><p>I am writing to request a leave of absence for [number] days, from [start date] to [end date], due to [reason for leave].</p><p><br></p><p>Thank you for your consideration.</p><p><br></p><p class="ql-align-right">Yours Sincerely,</p><p class="ql-align-right">[Your Name]</p><p class="ql-align-right">[Your Class/Roll No.]</p>
-                    </div>
+    <!-- This container holds ONLY the form steps -->
+    <div class="container" id="form-container">
+        <!-- STEP 1: WELCOME & TEXT INPUT -->
+        <div id="step-1" class="form-step active">
+            <h1 id="welcome-text">Welcome To The Shahil Assignment Writing AI</h1>
+            <div id="editor-container">
+                <div id="editor">
+                    <p>To,</p><p>The Principal,</p><p>[School Name],</p><p>[City].</p><p><br></p><p class="ql-align-center"><strong>Subject: Application for Leave</strong></p><p><br></p><p>Respected Sir/Madam,</p><p>I am writing to request a leave of absence for [number] days, from [start date] to [end date], due to [reason for leave].</p><p><br></p><p>Thank you for your consideration.</p><p><br></p><p class="ql-align-right">Yours Sincerely,</p><p class="ql-align-right">[Your Name]</p><p class="ql-align-right">[Your Class/Roll No.]</p>
                 </div>
-            </fieldset>
-
-            <fieldset>
-                <legend><i class="fas fa-scroll"></i> The Schematics: Paper Style</legend>
-                <div class="radio-group">
-                    <label><input type="radio" name="paper" value="A4 Sheet" checked required> Clean Slate (Plain)</label>
-                    <label><input type="radio" name="paper" value="A4 Sheet Lined"> Grid Plan (Lined)</label>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend><i class="fas fa-signature"></i> The Signature: Ink Color</legend>
-                <div class="avatar-group">
-                    <input type="radio" id="inkBlue" name="ink" value="Blue" checked required>
-                    <label for="inkBlue" class="avatar-label"><img src="https://i.ibb.co/L8yCDzC/F7-Hq3ml.png" alt="Blue Ink"><div class="avatar-text">Blue</div></label>
-                    <input type="radio" id="inkBlack" name="ink" value="Black" required>
-                    <label for="inkBlack" class="avatar-label"><img src="https://iili.io/F7HCpqP.md.png" alt="Black Ink"><div class="avatar-text">Black</div></label>
-                    <input type="radio" id="inkRed" name="ink" value="Red" required>
-                    <label for="inkRed" class="avatar-label"><img src="https://iili.io/F7HouF1.md.png" alt="Red Ink"><div class="avatar-text">Red</div></label>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend><i class="fas fa-user-secret"></i> The Operative: Handwriting</legend>
-                <div class="radio-group">
-                    <label><input type="radio" name="handwriting" value="Handwriting 1" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting1.ttf" checked required> The Analyst (Neat)</label>
-                    <label><input type="radio" name="handwriting" value="Handwriting 2" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting2.ttf" required> The Field Agent (Casual)</label>
-                    <label><input type="radio" name="handwriting" value="Handwriting 3" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting3.ttf" required> The Enforcer (Bold)</label>
-                    <label><input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required> The Specialist (Cursive)</label>
-                </div>
-            </fieldset>
-
-            <button type="button" id="generateBtn"><i class="fas fa-play"></i> Execute Plan</button>
+            </div>
+            <button id="btn-step-1" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
         </div>
 
-        <div id="loading" class="hidden"><img src="Assets/images/writing_animation.gif" alt="Executing Plan Animation"><p>Executing the plan...</p></div>
-        <div id="result" class="hidden"></div>
+        <!-- STEP 2: PAPER SELECTION -->
+        <div id="step-2" class="form-step">
+            <h2>Select Your Sheet</h2>
+            <div class="choice-row">
+                <label>
+                    <input type="radio" name="paper" value="A4 Sheet" checked required>
+                    <img src="https://iili.io/F7kdErv.png" alt="Plain A4 Sheet">
+                    <span>Clean Slate (Plain)</span>
+                </label>
+                <label>
+                    <input type="radio" name="paper" value="A4 Sheet Lined" required>
+                    <img src="https://iili.io/F7kfJHv.jpg" alt="Lined A4 Sheet">
+                    <span>Grid Plan (Lined)</span>
+                </label>
+            </div>
+            <button id="btn-step-2" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <!-- STEP 3: INK SELECTION -->
+        <div id="step-3" class="form-step">
+            <h2>Choose Your Ink</h2>
+            <div class="choice-row">
+                <label>
+                    <input type="radio" name="ink" value="Blue" checked required>
+                    <img src="https://iili.io/F7Hq3ml.png" alt="Blue Ink">
+                    <span>Blue</span>
+                </label>
+                <label>
+                    <input type="radio" name="ink" value="Black" required>
+                    <img src="https://iili.io/F7HCpqP.png" alt="Black Ink">
+                    <span>Black</span>
+                </label>
+                <label>
+                    <input type="radio" name="ink" value="Red" required>
+                    <img src="https://iili.io/F7HouF1.png" alt="Red Ink">
+                    <span>Red</span>
+                </label>
+            </div>
+            <button id="btn-step-3" class="btn-next">Continue <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <!-- STEP 4: HANDWRITING SELECTION -->
+        <div id="step-4" class="form-step">
+            <h2>Select Your Handwriting Style</h2>
+            <div class="choice-grid-2x2">
+                <label>
+                    <input type="radio" name="handwriting" value="Handwriting 1" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting1.ttf" checked required>
+                    <img src="https://iili.io/F7vTpob.png" alt="Handwriting 1">
+                    <span>The Analyst (Neat)</span>
+                </label>
+                <label>
+                    <input type="radio" name="handwriting" value="Handwriting 2" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting2.ttf" required>
+                    <img src="https://iili.io/F7v5nWu.jpg" alt="Handwriting 2">
+                    <span>The Field Agent (Casual)</span>
+                </label>
+                <label>
+                    <input type="radio" name="handwriting" value="Handwriting 3" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting3.ttf" required>
+                    <img src="https://iili.io/F7v7LuI.png" alt="Handwriting 3">
+                    <span>The Enforcer (Bold)</span>
+                </label>
+                <label>
+                    <input type="radio" name="handwriting" value="Handwriting 4" data-url="https://raw.githubusercontent.com/Eden-Global/Assigment-writer/main/Assets/fonts/Handwriting4.ttf" required>
+                    <img src="https://iili.io/F7vaVdx.jpg" alt="Handwriting 4">
+                    <span>The Specialist (Cursive)</span>
+                </label>
+            </div>
+            <button type="button" id="generateBtn"><i class="fas fa-cogs"></i> Generate</button>
+        </div>
+    </div>
+
+    <!-- ===== LOADING & RESULT ===== -->
+    <div id="loading" class="hidden">
+        <img src="Assets/images/writing_animation.gif?v=2" alt="Writing Animation">
+        <p>Generating your document... <br><span class="server-note">(First time may take up to a minute)</span></p>
+    </div>
+    <div id="result" class="hidden"></div>
+
+    <!-- ===== ANIMATED CHARACTER VIGNETTES ===== -->
+    <div id="character-vignette-right">
+        <img id="char-professor" src="https://iili.io/F7eXa3X.png" alt="Professor">
+        <img id="char-walter" src="https://iili.io/F7evPpt.png" alt="Walter White">
+        <img id="char-squidgame" src="https://iili.io/F7UUjxp.png" alt="Squid Game Hero">
+        <img id="char-steve" src="https://iili.io/F7eX74t.png" alt="Steve Harrington">
+    </div>
+    <div id="character-vignette-left">
+        <img id="char-berlin" src="https://iili.io/F7U62B2.png" alt="Berlin">
     </div>
 
     <!-- External Libraries -->
@@ -71,4 +124,4 @@
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="script.js"></script>
 </body>
-    </html>
+                        </html>
